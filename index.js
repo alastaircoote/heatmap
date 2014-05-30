@@ -33,13 +33,4 @@ heatmap.prototype = {
     }
 }
 
-h = new heatmap(100,100,10);
-
-h.addPoint(1,2);
-h.addPoint(2,3);
-h.addPoint(50,50);
-
-png = h.drawPng();
-
-fs.writeFileSync('./png.png', png.toString('binary'), 'binary');
-
+module.exports = heatmap;
