@@ -23,7 +23,7 @@ heatmap.prototype = {
         return Math.round(i) == i;
     },
     addPoint: function(x,y) {
-        if (!x || !y)
+        if (typeof x != 'number' || typeof y != 'number')
             throw new Error("Point must have x and y coordinates.");
         this._dataPoints.push([x,y]);
     },

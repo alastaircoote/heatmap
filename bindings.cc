@@ -4,6 +4,7 @@
 #include "lodepng.h"
 #include <node_buffer.h>
 
+
 using namespace v8;
 using namespace node;
 
@@ -22,11 +23,11 @@ namespace heatmap {
 
         heatmap_stamp_t* stamp = heatmap_stamp_gen(radius->Value());
         heatmap_t* hm = heatmap_new(width->Value(), height->Value());
-
         v8::Local<v8::Array> datapoints = v8::Local<v8::Array>::Cast(args[3]);
-        for (uint32_t i = 0; i < datapoints->Length();i++) {
 
+        for (uint32_t i = 0; i < datapoints->Length();i++) {
             v8::Local<v8::Array> point = v8::Local<v8::Array>::Cast(datapoints->Get(i));
+
             double x = point->Get(0)->NumberValue();
             double y = point->Get(1)->NumberValue();
             heatmap_add_point_with_stamp(hm, x, y, stamp);
@@ -42,12 +43,12 @@ namespace heatmap {
         if (error)
             return Number::New(error);
 
-        Buffer *slowBuffer = node::Buffer::New(arraySize);
-        memcpy(Buffer::Data(slowBuffer), png, arraySize);
+        Buffer *slowBuffer = node::Buffer::New(pngsize);
+        memcpy(Buffer::Data(slowBuffer), png, pngsize);
 
         Local<Object> globalObj = Context::GetCurrent()->Global();
         Local<Function> bufferConstructor = Local<Function>::Cast(globalObj->Get(String::New("Buffer")));
-        Handle<Value> constructorArgs[3] = { slowBuffer->handle_, v8::Integer::New(arraySize), v8::Integer::New(0) };
+        Handle<Value> constructorArgs[3] = { slowBuffer->handle_, v8::Integer::New(pngsize), v8::Integer::New(0) };
         Local<Object> actualBuffer = bufferConstructor->NewInstance(3, constructorArgs);
         
         heatmap_free(hm);
